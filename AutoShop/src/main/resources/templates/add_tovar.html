@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="ru">
+    <head>
+        <meta charset="UTF-8">
+        <title>Добавить товар</title>
+        <link rel="stylesheet" type="text/css" media="all" href="/static/style/style_home.css" th:href="@{/style/style_home.css}"/>
+    </head>
+    <body>
+        <div class="left_menu">
+            <div class="list_left_menu">
+                <ui>
+                    <a href="/"><li>Главная</li></a>
+                </ui>
+            </div>
+            <div class="user_info">
+                <p th:if="${user != null}" th:text="${user.getName()}"></p>
+                <form method="GET" th:if="${user != null}">
+                    <button value="exit" name="but_exit" class="but" formaction="/exit">Выйти</button>
+                </form>
+            </div>
+        </div>
+        <div class="main_content">
+            <div class="content_add_tovars">
+                <p>Добавить товар</p>
+                <p class="err" th:text="${err}">Упс</p>
+                <form method="post" enctype="multipart/form-data">
+                    <div class="inputs">
+                        <label>
+                            <input name="file" value="file" accept=".png,.jpg" type="file">
+                            <input type="text" name="name" maxlength="100" value="" placeholder="Название">
+                            <input type="text" name="brand" maxlength="100" value="" placeholder="Бренд">
+                            <textarea name="description" maxlength="255" value="" placeholder="Описание"></textarea>
+                            <input type="text" name="price" maxlength="10" value="" placeholder="Цена">
+                            <select name="category" size="1">
+                                <option hidden>Категория</option>
+                                <option th:each="cat, iterationstatus :${list}" th:text="${cat.getName()}">1</option>
+                            </select>
+                        </label>
+                    </div>
+                    <button class="but_add" formaction="/checkaddtovar">Добавить</button>
+                </form>
+            </div>
+        </div>
+    </body>
+</html>

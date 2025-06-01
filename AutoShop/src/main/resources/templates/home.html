@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+      <meta charset="UTF-8">
+      <title>Домашняя станица</title>
+      <link rel="stylesheet" type="text/css" media="all" href="/static/style/style_home.css" th:href="@{/style/style_home.css}"/>
+  </head>
+  <body>
+    <div class="left_menu">
+        <div class="list_left_menu">
+            <ui>
+                <a th:if="${user == null}" href="/login"><li>Войти</li></a>
+                <a th:if="${user != null}" href="/history"><li>История</li></a>
+                <a th:if="${user != null && user.checkRule(3)}" href="/add_tovar"><li>Добавить товар</li></a>
+            </ui>
+        </div>
+        <div class="user_info">
+            <p th:if="${user != null}" th:text="${user.getName()}"></p>
+            <form method="GET" th:if="${user != null}">
+                <button value="exit" name="but_exit" class="but" formaction="/exit">Выйти</button>
+            </form>
+        </div>
+    </div>
+    <div class="main_content">
+        <form method="POST">
+            <div class="header">
+                <label>
+                    <input type="text" name="txt_search" maxlength="" value="" placeholder="Найти" >
+                </label>
+                <button value="search" name="but_search" class="but" formaction="/">Искать</button>
+            </div>
+        </form>
+        <div class="content">
+            <a th:each="cat, iterationstatus :${list}" th:href="${cat.getHref()}" class="category" >
+                <img src="../static/img/tormoza.png" th:src="${cat.getImg()}" alt="тут была картинка(((">
+                <p th:text="${cat.getName()}"></p>
+            </a>
+        </div>
+    </div>
+  </body>
+</html>

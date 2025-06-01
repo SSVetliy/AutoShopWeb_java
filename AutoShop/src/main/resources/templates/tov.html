@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${tovar.getName()}">Title</title>
+    <link rel="stylesheet" type="text/css" media="all" href="/static/style/style_home.css" th:href="@{/style/style_home.css}"/>
+</head>
+<body>
+    <div class="left_menu">
+        <div class="list_left_menu">
+            <ui>
+                <a href="/"><li>Главная</li></a>
+                <a th:if="${user == null}" href="/login"><li>Войти</li></a>
+                <a th:if="${user != null}" href="/history"><li>История</li></a>
+                <a th:if="${user != null && user.checkRule(3)}" href="/add_tovar"><li>Добавить товар</li></a>
+            </ui>
+        </div>
+        <div class="user_info">
+            <p th:if="${user != null}" th:text="${user.getName()}"></p>
+            <form method="GET" th:if="${user != null}">
+                <button value="exit" name="but_exit" class="but" formaction="/exit">Выйти</button>
+            </form>
+        </div>
+      </div>
+      <div class="main_content">
+        <div class="main_header">
+            <form method="post">
+                <div class="header">
+                    <label>
+                        <input type="text" name="txt_search" maxlength="" value="" placeholder="Найти" >
+                    </label>
+                    <button value="search" name="but_search" class="but" formaction="/">Искать</button>
+                </div>
+            </form>
+        </div>
+        <div class="content_tovars">
+            <div class="tovat">
+                <img src="../static/img/6043244302.png" th:src="${tovar.getImg()}" alt="тут была картинка(((">
+                <div class="tovar_info">
+                    <div class="tovar_info_text">
+                        <p th:text="@{'Название: ' + ${tovar.getName()}}">Название:</p>
+                        <p th:text="@{'Бренд: ' + ${tovar.getBrand()}}">Бренд: </p>
+                        <p th:text="@{'Артикул: ' + ${tovar.getId()}}">Артикул: </p>
+                        <p th:if="${tovar.getDescription() != null}" th:text="@{'Описание: ' + ${tovar.getDescription()}}">Описание: </p>
+                    </div>
+                </div>
+                <div class="tovar_active">
+                    <p th:if="${tovar.getRating() != 0}" class="rating" th:text="${tovar.getRating()}">5</p>
+                    <div th:if="${tovar.getRating() != 0}" class="rating-mini">
+                        <div class="rating-mini_otziv">
+                            <span th:each="i : ${#numbers.sequence(1, tovar.getIntRating())}" class="active"></span>
+                            <span th:if="${tovar.getIntRating() != 5}" th:each="i : ${#numbers.sequence(tovar.getIntRating(), 4)}"></span>
+                        </div>
+                    </div>
+                    <div class="price_tov">
+                        <p th:text="@{${tovar.getPrice()} + 'р'}">99р</p>
+                    </div>
+                    <form method="post" th:if="${user != null && user.checkRule(1)}">
+                        <button name="but_in_korzina_tov" class="in_korzina_tov" formaction="/baytovar" th:value="${tovar.getId()}">Купить</button>
+                    </form>
+<!--                    <a th:if="${name != null}">-->
+<!--                        <div class="in_korzina_tov">-->
+<!--                            <p>В корзину</p>-->
+<!--                        </div>-->
+<!--                    </a>-->
+                    <form method="get" th:if="${user != null && user.canAddFeedback(tovar)}">
+<!--                        th:if="${user != null && user.checkRule(2)}"-->
+                        <button name="id" class="otziv_tov" formaction="/feedback" th:value="${tovar.getId()}">Написать отзыв</button>
+                    </form>
+<!--                    <a th:if="${name != null}">-->
+<!--                        <div class="otziv_tov">-->
+<!--                            <p>Написать отзыв</p>-->
+<!--                        </div>-->
+<!--                    </a>-->
+                </div>
+                <form method="post" class="del_tovar" th:if="${user != null && user.checkRule(3)}" >
+                    <button value="delete" th:id="${tovar.getId()}" name="but_delete" class="but_del">X</button>
+                </form>
+            </div>
+            <div>
+                <div class="tovar_otziv" th:each="feedback, iterationstatus :${list}">
+                    <div class="tovar_otziv_header">
+                        <div class="tovar_otziv_header_name">
+                            <p th:text="${feedback.getName()}">Имя</p>
+                        </div>
+                        <div class="tovar_otziv_header_right">
+                            <p th:text="${feedback.getRating()}">5</p>
+                            <div class="rating-mini_otziv">
+                                <span th:each="i : ${#numbers.sequence(1, feedback.getRating())}" class="active"></span>
+                                <span th:if="${feedback.getRating() != 5}" th:each="i : ${#numbers.sequence(feedback.getRating(), 4)}"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <p th:text="${feedback.getCommentary()}">Сам отзыв</p>
+                </div>
+            </div>
+        </div>
+      </div>
+</body>
+</html>

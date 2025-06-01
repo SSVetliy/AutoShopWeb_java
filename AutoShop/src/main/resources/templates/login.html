@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="ru">
+    <head>
+        <meta charset="UTF-8">
+        <title>Вход</title>
+        <link rel="stylesheet" type="text/css" media="all" href="/static/style/style_login.css" th:href="@{/style/style_login.css}"/>
+    </head>
+    <body>
+        <div class="main_content">
+            <p>Войти или зарегистрироваться</p>
+            <p class="err" th:text="${err}">Упс</p>
+            <form method="post">
+                <div class="inputs">
+                    <label>
+                        <input type="text" name="log" maxlength="16" value="" placeholder="Логин">
+                    </label>
+                    <label>
+                        <input type="password" name="pass" maxlength="8" value="" placeholder="Пароль">
+                    </label>
+                </div>
+                <button class="login" formaction="/checklog">Войти</button>
+                <a href="/regist">
+                    <div class="regist" >
+                        <p>Зарегистрироваться</p>
+                    </div>
+                </a>
+            </form>
+        </div>
+    </body>
+</html>

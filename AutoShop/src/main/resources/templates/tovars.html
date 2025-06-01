@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="ru">
+    <head>
+        <meta charset="UTF-8">
+        <title th:text="${name_cat}">Title</title>
+        <link rel="stylesheet" type="text/css" media="all" href="/static/style/style_home.css" th:href="@{/style/style_home.css}"/>
+    </head>
+    <body>
+        <div class="left_menu">
+            <div class="list_left_menu">
+                <ui>
+                    <a href="/"><li>Главная</li></a>
+                    <a th:if="${user == null}" href="/login"><li>Войти</li></a>
+                    <a th:if="${user != null}" href="/history"><li>История</li></a>
+                    <a th:if="${user != null && user.checkRule(3)}" href="/add_tovar"><li>Добавить товар</li></a>
+                </ui>
+            </div>
+            <div class="user_info">
+                <p th:if="${user != null}" th:text="${user.getName()}"></p>
+                <form method="GET" th:if="${user != null}">
+                    <button value="exit" name="but_exit" class="but" formaction="/exit">Выйти</button>
+                </form>
+            </div>
+        </div>
+        <div class="main_content">
+            <div class="main_header">
+                <form method="post">
+                    <div class="header">
+                        <label>
+                            <input type="text" name="txt_search" maxlength="" th:value="${val_search}" placeholder="Найти" >
+                        </label>
+                        <button value="search" name="but_search" class="but" formaction="/">Искать</button>
+                    </div>
+                </form>
+            </div>
+            <div class="content_tovars">
+                <div class="tovats" th:each="tovar, iterationstatus :${list}" th:if="${tovar.isDisplay() || (user != null && user.checkRule(3))}" >
+                    <a th:href="@{/tovar(id=${tovar.getId()})}">
+                        <img src="../static/img/6043244302.png" th:src="${tovar.getImg()}" alt="тут была картинка(((">
+                    </a>
+                    <div class="tovars_info">
+                        <div class="tovars_info_text">
+                            <a th:href="@{/tovar(id=${tovar.getId()})}"><p th:text="@{'Название: ' + ${tovar.getName()}}">Название:</p></a>
+                            <p th:text="@{'Бренд: ' + ${tovar.getBrand()}}">Бренд: </p>
+                            <p th:text="@{'Артикул: ' + ${tovar.getId()}}">Артикул: </p>
+                            <p th:if="${user != null && user.checkRule(3) && !tovar.isDisplay()}" th:text="@{'Скрыт'}">Скрыт: </p>
+                        </div>
+                    </div>
+                    <div class="tovars_active">
+                        <p th:if="${tovar.getRating() != 0}" class="rating" th:text="${tovar.getRating()}">5</p>
+                        <div th:if="${tovar.getRating() != 0}" class="rating-mini">
+                            <div class="rating-mini_otziv">
+                                <span th:each="i : ${#numbers.sequence(1, tovar.getIntRating())}" class="active"></span>
+                                <span th:if="${tovar.getIntRating() != 5}" th:each="i : ${#numbers.sequence(tovar.getIntRating(), 4)}"></span>
+                            </div>
+                        </div>
+                        <div class="price">
+                            <p th:text="@{${tovar.getPrice()} + 'р'}">99р</p>
+                        </div>
+<!--                        <form method="post" th:if="${name != null}">-->
+<!--                            <button name="but_in_korzina" class="in_korzina" formaction="/checklog" th:value="${tovar.getId()}">В корзину</button>-->
+<!--                        </form>-->
+
+<!--                        <a th:if="${name != null}">-->
+<!--                            <div class="in_korzina">-->
+<!--                                <p>В корзину</p>-->
+<!--                            </div>-->
+<!--                        </a>-->
+                    </div>
+                    <form method="post" class="del_tovars" th:if="${user != null && user.checkRule(3)}" >
+                        <button th:value="${tovar.getId()}" name="but_delete" class="but_del">X</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </body>
+<!--    <script>-->
+<!--        window.onload = function (){-->
+<!--            var k = document.getElementsByName("but_delete");-->
+<!--            for(var i = 0; i < k.length; i++){-->
+<!--                k[i].onclick = function () {-->
+<!--                    if (confirm("Точно?")) {-->
+<!--                        let data = new FormData();-->
+<!--                        data.append('myVar', this.id);-->
+<!--                        fetch('/category', {-->
+<!--                            method: 'POST',-->
+<!--                            body: data,-->
+<!--                        })-->
+<!--                    }-->
+<!--                }-->
+<!--            }-->
+<!--        }-->
+<!--    </script>-->
+</html>

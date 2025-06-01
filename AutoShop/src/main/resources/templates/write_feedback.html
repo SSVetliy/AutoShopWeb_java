@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="ru">
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Написать отзыв</title>
+    <link rel="stylesheet" type="text/css" media="all" href="/static/style/style_home.css" th:href="@{/style/style_home.css}"/>
+</head>
+<body>
+<div class="left_menu">
+    <div class="list_left_menu">
+        <ui>
+            <a href="/"><li>Главная</li></a>
+            <a th:if="${user != null}" href="/history"><li>История</li></a>
+        </ui>
+    </div>
+    <div class="user_info">
+        <p th:if="${uset != null}" th:text="${user.getName()}"></p>
+        <form method="GET" th:if="${name != null}">
+            <button value="exit" name="but_exit" class="but" formaction="/exit">Выйти</button>
+        </form>
+    </div>
+</div>
+<div class="main_content">
+    <div class="content_add_tovars">
+        <form method="post">
+            <div class="inputs">
+                <div class="tovar_feedback">
+                    <img src="../static/img/6043244302.png" th:src="${tovar.getImg()}" alt="тут была картинка(((">
+                    <div class="tovars_info">
+                        <div class="tovars_info_text">
+                            <p th:text="${tovar.getName()}">Название:</p>
+                        </div>
+                    </div>
+                </div>
+                <label>
+                    <textarea name="feedback" maxlength="1428" placeholder="Напишите отзыв"></textarea>
+                </label>
+                <p>Выберите оценку</p>
+                <select name="rating" size="1">
+                    <option th:each="i : ${#numbers.sequence(1, 5)}" th:value="${i}" th:text="${i} + '★'"></option>
+                </select>
+            </div>
+            <button class="but_add" name="id" th:value="${tovar.getId()}" formaction="/feedback">Отправить</button>
+        </form>
+    </div>
+</div>
+</body>
+</html>
